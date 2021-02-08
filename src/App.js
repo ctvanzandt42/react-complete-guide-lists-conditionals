@@ -8,11 +8,25 @@ class App extends Component {
         inputText: ''
     }
 
-    inputTextHandler = (event) => {
+    inputTextHandler = ( event ) => {
         this.setState({inputText: event.target.value});
     }
 
+    deleteCharHandler = ( index ) => {
+        const text = this.state.inputText.split('');
+        text.splice(index, 1);
+        const updatedText = text.join('');
+        this.setState({inputText: updatedText});
+    }
+
     render() {
+        const charList = this.state.inputText.split('').map((ch, index) => {
+            return <Char
+                key={index}
+                letter={ch}
+                clicked={() => this.deleteCharHandler(index)}/>;
+        });
+
         return (
             <div className="App">
                 <ol>
@@ -25,14 +39,12 @@ class App extends Component {
 
                 <input
                     type='text'
-                    onChange={this.inputTextHandler}/>
-                <p>{this.state.inputText.length}</p>
+                    onChange={this.inputTextHandler}
+                    value={this.state.inputText}/>
+                <p>{this.state.inputText}</p>
                 <Validation
-                    input={this.state.inputText} />
-                <Char />
-                <Char />
-                <Char />
-                <Char />
+                    inputLength={this.state.inputText.length} />
+                {charList}
             </div>
 
         );
